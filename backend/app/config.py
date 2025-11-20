@@ -25,8 +25,9 @@ class Settings(BaseSettings):
 
     # LLM Provider
     openai_api_key: str | None = Field(None, description="OpenAI API key")
-    llm_provider: Literal["openai", "anthropic"] = Field("openai", description="LLM provider")
-    llm_model: str = Field("gpt-4-turbo-preview", description="LLM model to use")
+    llm_api_key: str | None = Field(None, description="Generic LLM API key (DeepSeek, etc.)")
+    llm_provider: Literal["openai", "anthropic", "deepseek"] = Field("deepseek", description="LLM provider")
+    llm_model: str = Field("deepseek-chat", description="LLM model to use")
 
     # Device Configuration
     device: Literal["cpu", "cuda"] = Field("cpu", description="PyTorch device")
