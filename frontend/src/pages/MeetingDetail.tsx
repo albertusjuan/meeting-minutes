@@ -162,25 +162,25 @@ export default function MeetingDetail() {
             Back to Home
           </Link>
 
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <h1 className="text-2xl font-bold text-gray-900 mb-4">
+          <div className="glass-card rounded-3xl p-8">
+            <h1 className="text-3xl font-bold text-white mb-6">
               Meeting Details
             </h1>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-              <div>
-                <span className="text-gray-600">Meeting ID:</span>
-                <p className="font-mono text-gray-900 mt-1">{meeting.meeting_id}</p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="glass rounded-2xl p-4">
+                <span className="text-gray-400 font-medium">Meeting ID:</span>
+                <p className="font-mono text-white mt-2 text-sm">{meeting.meeting_id}</p>
               </div>
               
-              <div>
-                <span className="text-gray-600">Duration:</span>
-                <p className="text-gray-900 mt-1">{formatDuration(meeting.transcript.duration)}</p>
+              <div className="glass rounded-2xl p-4">
+                <span className="text-gray-400 font-medium">Duration:</span>
+                <p className="text-white mt-2 font-semibold">{formatDuration(meeting.transcript.duration)}</p>
               </div>
               
-              <div>
-                <span className="text-gray-600">Speakers:</span>
-                <p className="text-gray-900 mt-1">
+              <div className="glass rounded-2xl p-4">
+                <span className="text-gray-400 font-medium">Speakers:</span>
+                <p className="text-white mt-2 font-semibold">
                   {meeting.transcript.speakers.length} speaker{meeting.transcript.speakers.length !== 1 ? 's' : ''}
                 </p>
               </div>
@@ -189,18 +189,18 @@ export default function MeetingDetail() {
         </div>
 
         {/* Tabs */}
-        <div className="mb-6">
-          <div className="border-b border-gray-200 bg-white rounded-t-lg">
-            <nav className="-mb-px flex space-x-8 px-6" aria-label="Tabs">
+        <div className="mb-8">
+          <div className="glass rounded-3xl p-2">
+            <nav className="flex space-x-2" aria-label="Tabs">
               <button
                 onClick={() => setActiveTab('summary')}
-                className={`py-4 px-1 border-b-2 font-medium text-sm transition ${
+                className={`flex-1 py-4 px-4 rounded-2xl font-semibold transition-all duration-200 ${
                   activeTab === 'summary'
-                    ? 'border-primary-500 text-primary-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                    ? 'bg-gradient-to-r from-white via-gray-200 to-gray-400 text-black shadow-lg'
+                    : 'text-gray-400 hover:bg-white/10'
                 }`}
               >
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center justify-center space-x-2">
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       strokeLinecap="round"
@@ -215,13 +215,13 @@ export default function MeetingDetail() {
 
               <button
                 onClick={() => setActiveTab('transcript')}
-                className={`py-4 px-1 border-b-2 font-medium text-sm transition ${
+                className={`flex-1 py-4 px-4 rounded-2xl font-semibold transition-all duration-200 ${
                   activeTab === 'transcript'
-                    ? 'border-primary-500 text-primary-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                    ? 'bg-gradient-to-r from-white via-gray-200 to-gray-400 text-black shadow-lg'
+                    : 'text-gray-400 hover:bg-white/10'
                 }`}
               >
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center justify-center space-x-2">
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       strokeLinecap="round"
@@ -231,7 +231,9 @@ export default function MeetingDetail() {
                     />
                   </svg>
                   <span>Transcript</span>
-                  <span className="bg-gray-200 text-gray-700 px-2 py-0.5 rounded-full text-xs">
+                  <span className={`px-2.5 py-0.5 rounded-xl text-xs font-bold ${
+                    activeTab === 'transcript' ? 'bg-black/20 text-black' : 'bg-gray-700 text-gray-400'
+                  }`}>
                     {meeting.transcript.chunks.length}
                   </span>
                 </div>
@@ -239,13 +241,13 @@ export default function MeetingDetail() {
 
               <button
                 onClick={() => setActiveTab('qa')}
-                className={`py-4 px-1 border-b-2 font-medium text-sm transition ${
+                className={`flex-1 py-4 px-4 rounded-2xl font-semibold transition-all duration-200 ${
                   activeTab === 'qa'
-                    ? 'border-primary-500 text-primary-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                    ? 'bg-gradient-to-r from-white via-gray-200 to-gray-400 text-black shadow-lg'
+                    : 'text-gray-400 hover:bg-white/10'
                 }`}
               >
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center justify-center space-x-2">
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       strokeLinecap="round"

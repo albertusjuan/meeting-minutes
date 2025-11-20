@@ -17,20 +17,20 @@ export default function MeetingList({ meetings }: MeetingListProps) {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-      <h2 className="text-lg font-semibold text-gray-900 mb-4">Recent Meetings</h2>
+    <div className="glass-card rounded-3xl p-8">
+      <h2 className="text-xl font-semibold text-gray-900 mb-6">Recent Meetings</h2>
       
-      <div className="space-y-2">
+      <div className="space-y-3">
         {meetings.map((meeting) => (
           <button
             key={meeting.id}
             onClick={() => navigate(`/meeting/${meeting.id}`)}
-            className="w-full text-left px-4 py-3 rounded-lg border border-gray-200 hover:border-primary-500 hover:bg-primary-50 transition flex items-center justify-between group"
+            className="w-full text-left px-5 py-4 rounded-2xl glass-button hover:scale-[1.02] transition-all duration-200 flex items-center justify-between group"
           >
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center group-hover:bg-primary-200 transition">
+            <div className="flex items-center space-x-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-white via-gray-200 to-gray-400 rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all">
                 <svg
-                  className="w-5 h-5 text-primary-600"
+                  className="w-6 h-6 text-black"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -44,15 +44,15 @@ export default function MeetingList({ meetings }: MeetingListProps) {
                 </svg>
               </div>
               <div>
-                <p className="font-medium text-gray-900">Meeting {meeting.id.slice(0, 12)}...</p>
-                <p className="text-sm text-gray-500">
+                <p className="font-semibold text-white">Meeting {meeting.id.slice(0, 12)}...</p>
+                <p className="text-sm text-gray-400">
                   {meeting.timestamp.toLocaleString()}
                 </p>
               </div>
             </div>
 
             <svg
-              className="w-5 h-5 text-gray-400 group-hover:text-primary-600"
+              className="w-5 h-5 text-gray-500 group-hover:text-white group-hover:translate-x-1 transition-all"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"

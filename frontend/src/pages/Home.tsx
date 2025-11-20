@@ -56,10 +56,10 @@ export default function Home() {
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="text-5xl font-bold bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent mb-4">
             AI-Powered Meeting Transcription
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed">
             Upload your meeting audio and get instant transcription with speaker diarization,
             multi-language support (Cantonese + English), AI summaries, and intelligent Q&A.
           </p>
@@ -72,24 +72,26 @@ export default function Home() {
 
         {/* Error Message */}
         {error && (
-          <div className="mb-8 bg-red-50 border border-red-200 rounded-lg p-4">
+          <div className="mb-8 glass-card rounded-3xl p-6">
             <div className="flex items-start">
-              <svg
-                className="w-5 h-5 text-red-600 mt-0.5 mr-3 flex-shrink-0"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
+              <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-gray-400 to-gray-600 flex items-center justify-center mr-4 shadow-lg flex-shrink-0">
+                <svg
+                  className="w-5 h-5 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+              </div>
               <div>
-                <h3 className="font-medium text-red-900 mb-1">Upload Failed</h3>
-                <p className="text-sm text-red-700">{error}</p>
+                <h3 className="font-semibold text-white mb-1 text-lg">Upload Failed</h3>
+                <p className="text-gray-300">{error}</p>
               </div>
             </div>
           </div>
@@ -97,10 +99,10 @@ export default function Home() {
 
         {/* Processing Status */}
         {isUploading && (
-          <div className="mb-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
-            <div className="flex items-center justify-center space-x-4">
+          <div className="mb-8 glass-card rounded-3xl p-8">
+            <div className="flex items-center justify-center space-x-6">
               <svg
-                className="animate-spin h-8 w-8 text-primary-600"
+                className="animate-spin h-12 w-12 text-white"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -120,8 +122,8 @@ export default function Home() {
                 ></path>
               </svg>
               <div>
-                <p className="font-medium text-blue-900">Processing your meeting...</p>
-                <p className="text-sm text-blue-700 mt-1">
+                <p className="font-semibold text-white text-lg">Processing your meeting...</p>
+                <p className="text-gray-300 mt-1">
                   This may take several minutes. Please don't close this page.
                 </p>
               </div>
@@ -137,11 +139,11 @@ export default function Home() {
         )}
 
         {/* Features */}
-        <div className="grid md:grid-cols-3 gap-6 mt-12">
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+        <div className="grid md:grid-cols-3 gap-8 mt-16">
+          <div className="glass-card rounded-3xl p-8 hover:scale-105 transition-transform duration-300">
+            <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-3xl flex items-center justify-center mb-6 shadow-xl">
               <svg
-                className="w-6 h-6 text-blue-600"
+                className="w-8 h-8 text-white"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -154,16 +156,16 @@ export default function Home() {
                 />
               </svg>
             </div>
-            <h3 className="font-semibold text-gray-900 mb-2">Speaker Diarization</h3>
-            <p className="text-sm text-gray-600">
+            <h3 className="font-bold text-white mb-3 text-xl">Speaker Diarization</h3>
+            <p className="text-gray-300 leading-relaxed">
               Automatically identifies and labels different speakers in your meeting.
             </p>
           </div>
 
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
+          <div className="glass-card rounded-3xl p-8 hover:scale-105 transition-transform duration-300">
+            <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-3xl flex items-center justify-center mb-6 shadow-xl">
               <svg
-                className="w-6 h-6 text-green-600"
+                className="w-8 h-8 text-white"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -176,16 +178,16 @@ export default function Home() {
                 />
               </svg>
             </div>
-            <h3 className="font-semibold text-gray-900 mb-2">Multi-Language</h3>
-            <p className="text-sm text-gray-600">
+            <h3 className="font-bold text-white mb-3 text-xl">Multi-Language</h3>
+            <p className="text-gray-300 leading-relaxed">
               Supports Cantonese and English with automatic code-switching detection.
             </p>
           </div>
 
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
+          <div className="glass-card rounded-3xl p-8 hover:scale-105 transition-transform duration-300">
+            <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-3xl flex items-center justify-center mb-6 shadow-xl">
               <svg
-                className="w-6 h-6 text-purple-600"
+                className="w-8 h-8 text-white"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -198,8 +200,8 @@ export default function Home() {
                 />
               </svg>
             </div>
-            <h3 className="font-semibold text-gray-900 mb-2">AI Analysis</h3>
-            <p className="text-sm text-gray-600">
+            <h3 className="font-bold text-white mb-3 text-xl">AI Analysis</h3>
+            <p className="text-gray-300 leading-relaxed">
               Get summaries, action items, key decisions, and ask questions about your meeting.
             </p>
           </div>
