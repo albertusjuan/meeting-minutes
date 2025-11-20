@@ -10,6 +10,9 @@ echo "  File Upload System - Starting..."
 echo "========================================="
 echo ""
 
+# Create logs directory if it doesn't exist
+mkdir -p logs
+
 # Check prerequisites
 echo "[1/2] Starting Backend Server..."
 cd backend
@@ -73,9 +76,6 @@ FRONTEND_PID=$!
 echo "Frontend PID: $FRONTEND_PID"
 
 cd ..
-
-# Create logs directory if it doesn't exist
-mkdir -p logs
 
 echo ""
 echo "========================================="
