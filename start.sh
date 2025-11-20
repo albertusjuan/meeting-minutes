@@ -14,20 +14,29 @@ echo ""
 echo "[1/2] Starting Backend Server..."
 cd backend
 
+# Detect OS and set activation script path
+if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "win32" ]]; then
+    ACTIVATE_SCRIPT="venv/Scripts/activate"
+    PYTHON_CMD="python"
+else
+    ACTIVATE_SCRIPT="venv/bin/activate"
+    PYTHON_CMD="python3"
+fi
+
 # Create virtual environment if it doesn't exist
 if [ ! -d "venv" ]; then
     echo "Creating virtual environment..."
-    python3 -m venv venv
-    source venv/bin/activate
+    $PYTHON_CMD -m venv venv
+    source $ACTIVATE_SCRIPT
     echo "Installing dependencies..."
     pip install -r requirements.txt
 else
-    source venv/bin/activate
+    source $ACTIVATE_SCRIPT
 fi
 
 # Start backend in background
 echo "Starting FastAPI server on http://localhost:8000"
-python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload > ../logs/backend.log 2>&1 &
+$PYTHON_CMD -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload > ../logs/backend.log 2>&1 &
 BACKEND_PID=$!
 echo "Backend PID: $BACKEND_PID"
 
