@@ -29,24 +29,20 @@ async def lifespan(app: FastAPI):
     Handles startup and shutdown events.
     """
     # Startup
-    logger.info("Starting Meeting Minutes API...")
+    logger.info("Starting File Upload API...")
     logger.info(f"Upload directory: {settings.upload_dir}")
-    logger.info(f"Storage directory: {settings.storage_dir}")
-    logger.info(f"Device: {settings.device}")
+    logger.info(f"Max file size: {settings.max_file_size_mb}MB")
 
     yield
 
     # Shutdown
-    logger.info("Shutting down Meeting Minutes API...")
+    logger.info("Shutting down File Upload API...")
 
 
 # Create FastAPI app
 app = FastAPI(
-    title="Meeting Minutes API",
-    description=(
-        "AI-powered meeting transcription, diarization, and analysis. "
-        "Supports Cantonese and English code-switching."
-    ),
+    title="File Upload API",
+    description="Simple file upload system for audio files.",
     version="0.1.0",
     lifespan=lifespan,
 )
@@ -68,14 +64,12 @@ app.include_router(meeting.router)
 async def root():
     """Root endpoint with API information."""
     return {
-        "name": "Meeting Minutes API",
+        "name": "File Upload API",
         "version": "0.1.0",
         "status": "running",
         "endpoints": {
-            "upload": "/meetings/upload",
-            "qa": "/meetings/qa/{meeting_id}",
-            "get_meeting": "/meetings/{meeting_id}",
-            "list_meetings": "/meetings/",
+            "upload": "/upload/",
+            "list_files": "/upload/files",
         },
     }
 

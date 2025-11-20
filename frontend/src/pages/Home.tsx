@@ -1,44 +1,49 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import Layout from '../components/Layout';
 import FileUpload from '../components/FileUpload';
-import MeetingList from '../components/MeetingList';
-import { uploadMeeting } from '../api/meetings';
-
-interface Meeting {
-  id: string;
-  timestamp: Date;
-}
+import { uploadFile, listFiles } from '../api/meetings';
+import type { FileInfo } from '../types/meeting';
 
 export default function Home() {
-  const [meetings, setMeetings] = useState<Meeting[]>([]);
+  const [files, setFiles] = useState<FileInfo[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate();
+  const [success, setSuccess] = useState<string | null>(null);
+
+  // Load files on mount
+  useEffect(() => {
+    loadFiles();
+  }, []);
+
+  const loadFiles = async () => {
+    try {
+      const result = await listFiles();
+      setFiles(result.files);
+    } catch (err) {
+      console.error('Failed to load files:', err);
+    }
+  };
 
   const handleUpload = async (file: File) => {
     setIsUploading(true);
     setError(null);
+    setSuccess(null);
 
     try {
       console.log('Uploading file:', file.name);
-      const result = await uploadMeeting(file);
+      const result = await uploadFile(file);
       
       console.log('Upload successful:', result);
 
-      // Add to meetings list
-      const newMeeting: Meeting = {
-        id: result.meeting_id,
-        timestamp: new Date(),
-      };
-      setMeetings((prev) => [newMeeting, ...prev]);
-
-      // Navigate to meeting detail page
-      navigate(`/meeting/${result.meeting_id}`);
+      setSuccess(`File "${result.filename}" uploaded successfully! (${(result.file_size / 1024 / 1024).toFixed(2)} MB)`);
+      setIsUploading(false);
+      
+      // Reload files list
+      await loadFiles();
     } catch (err: any) {
       console.error('Upload error:', err);
       
-      let errorMessage = 'Failed to process meeting. Please try again.';
+      let errorMessage = 'Failed to upload file. Please try again.';
       
       if (err.response?.data?.detail) {
         errorMessage = err.response.data.detail;
@@ -51,17 +56,29 @@ export default function Home() {
     }
   };
 
+  const formatFileSize = (bytes: number): string => {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+  };
+
+  const formatDate = (dateString: string): string => {
+    const date = new Date(dateString);
+    return date.toLocaleString();
+  };
+
   return (
     <Layout>
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-5xl font-bold bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent mb-4">
-            AI-Powered Meeting Transcription
+            File Upload System
           </h1>
           <p className="text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed">
-            Upload your meeting audio and get instant transcription with speaker diarization,
-            multi-language support (Cantonese + English), AI summaries, and intelligent Q&A.
+            Upload your audio files (WAV, MP3, M4A, or FLAC) securely to our server.
           </p>
         </div>
 
@@ -70,11 +87,38 @@ export default function Home() {
           <FileUpload onUpload={handleUpload} isUploading={isUploading} />
         </div>
 
+        {/* Success Message */}
+        {success && (
+          <div className="mb-8 glass-card rounded-3xl p-6">
+            <div className="flex items-start">
+              <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center mr-4 shadow-lg flex-shrink-0">
+                <svg
+                  className="w-5 h-5 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+              </div>
+              <div>
+                <h3 className="font-semibold text-white mb-1 text-lg">Upload Successful</h3>
+                <p className="text-gray-300">{success}</p>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Error Message */}
         {error && (
           <div className="mb-8 glass-card rounded-3xl p-6">
             <div className="flex items-start">
-              <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-gray-400 to-gray-600 flex items-center justify-center mr-4 shadow-lg flex-shrink-0">
+              <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-red-400 to-red-600 flex items-center justify-center mr-4 shadow-lg flex-shrink-0">
                 <svg
                   className="w-5 h-5 text-white"
                   fill="none"
@@ -97,115 +141,41 @@ export default function Home() {
           </div>
         )}
 
-        {/* Processing Status */}
-        {isUploading && (
-          <div className="mb-8 glass-card rounded-3xl p-8">
-            <div className="flex items-center justify-center space-x-6">
-              <svg
-                className="animate-spin h-12 w-12 text-white"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                ></circle>
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                ></path>
-              </svg>
-              <div>
-                <p className="font-semibold text-white text-lg">Processing your meeting...</p>
-                <p className="text-gray-300 mt-1">
-                  This may take several minutes. Please don't close this page.
-                </p>
-              </div>
+        {/* Uploaded Files List */}
+        {files.length > 0 && (
+          <div className="mt-12 glass-card rounded-3xl p-8">
+            <h2 className="text-2xl font-bold text-white mb-6">Uploaded Files ({files.length})</h2>
+            <div className="space-y-4">
+              {files.map((file, index) => (
+                <div key={index} className="glass rounded-2xl p-5 flex items-center justify-between">
+                  <div className="flex items-center space-x-4">
+                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-white via-gray-200 to-gray-400 flex items-center justify-center shadow-lg">
+                      <svg
+                        className="w-6 h-6 text-black"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"
+                        />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-white">{file.filename}</p>
+                      <p className="text-sm text-gray-400">
+                        {formatFileSize(file.size)} • {formatDate(file.uploaded_at)}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         )}
-
-        {/* Meetings List */}
-        {meetings.length > 0 && (
-          <div className="mb-8">
-            <MeetingList meetings={meetings} />
-          </div>
-        )}
-
-        {/* Features */}
-        <div className="grid md:grid-cols-3 gap-8 mt-16">
-          <div className="glass-card rounded-3xl p-8 hover:scale-105 transition-transform duration-300">
-            <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-3xl flex items-center justify-center mb-6 shadow-xl">
-              <svg
-                className="w-8 h-8 text-white"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                />
-              </svg>
-            </div>
-            <h3 className="font-bold text-white mb-3 text-xl">Speaker Diarization</h3>
-            <p className="text-gray-300 leading-relaxed">
-              Automatically identifies and labels different speakers in your meeting.
-            </p>
-          </div>
-
-          <div className="glass-card rounded-3xl p-8 hover:scale-105 transition-transform duration-300">
-            <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-3xl flex items-center justify-center mb-6 shadow-xl">
-              <svg
-                className="w-8 h-8 text-white"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"
-                />
-              </svg>
-            </div>
-            <h3 className="font-bold text-white mb-3 text-xl">Multi-Language</h3>
-            <p className="text-gray-300 leading-relaxed">
-              Supports Cantonese and English with automatic code-switching detection.
-            </p>
-          </div>
-
-          <div className="glass-card rounded-3xl p-8 hover:scale-105 transition-transform duration-300">
-            <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-3xl flex items-center justify-center mb-6 shadow-xl">
-              <svg
-                className="w-8 h-8 text-white"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
-                />
-              </svg>
-            </div>
-            <h3 className="font-bold text-white mb-3 text-xl">AI Analysis</h3>
-            <p className="text-gray-300 leading-relaxed">
-              Get summaries, action items, key decisions, and ask questions about your meeting.
-            </p>
-          </div>
-        </div>
       </div>
     </Layout>
   );

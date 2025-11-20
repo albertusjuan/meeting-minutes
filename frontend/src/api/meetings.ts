@@ -1,60 +1,44 @@
 /**
- * API functions for meeting operations
+ * API functions for file upload operations
  */
 
 import apiClient from './client';
-import type { UploadResponse, QARequest, QAResponse, MeetingResult } from '../types/meeting';
+import type { UploadResponse } from '../types/meeting';
 
 /**
- * Upload a meeting audio file for processing
+ * Upload an audio file
  */
-export async function uploadMeeting(file: File): Promise<UploadResponse> {
+export async function uploadFile(file: File): Promise<UploadResponse> {
+  console.log('[API] Starting upload:', file.name, 'Size:', file.size);
+  console.log('[API] API Base URL:', apiClient.defaults.baseURL);
+  
   const formData = new FormData();
   formData.append('file', file);
+  
+  console.log('[API] FormData created, field name: "file"');
+  console.log('[API] Sending POST to /upload/');
 
-  const response = await apiClient.post<UploadResponse>('/meetings/upload', formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
+  try {
+    const response = await apiClient.post<UploadResponse>('/upload/', formData);
 
-  return response.data;
+    console.log('[API] ✅ Upload successful! Response:', response.data);
+    return response.data;
+  } catch (error: any) {
+    console.error('[API] ❌ Upload failed!');
+    console.error('[API] Error details:', error);
+    if (error.response) {
+      console.error('[API] Response status:', error.response.status);
+      console.error('[API] Response data:', error.response.data);
+    }
+    throw error;
+  }
 }
 
 /**
- * Ask a question about a specific meeting
+ * List all uploaded files
  */
-export async function askQuestion(
-  meetingId: string,
-  question: string,
-  topK: number = 5
-): Promise<QAResponse> {
-  const payload: QARequest = {
-    question,
-    top_k: topK,
-  };
-
-  const response = await apiClient.post<QAResponse>(
-    `/meetings/qa/${meetingId}`,
-    payload
-  );
-
-  return response.data;
-}
-
-/**
- * Get meeting details by ID
- */
-export async function getMeetingDetails(meetingId: string): Promise<MeetingResult> {
-  const response = await apiClient.get<MeetingResult>(`/meetings/${meetingId}`);
-  return response.data;
-}
-
-/**
- * List all meetings
- */
-export async function listMeetings(): Promise<{ total: number; meetings: string[] }> {
-  const response = await apiClient.get<{ total: number; meetings: string[] }>('/meetings/');
+export async function listFiles(): Promise<{ total: number; files: Array<{filename: string; size: number; uploaded_at: string}> }> {
+  const response = await apiClient.get('/upload/files');
   return response.data;
 }
 

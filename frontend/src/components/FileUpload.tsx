@@ -154,10 +154,10 @@ export default function FileUpload({ onUpload, isUploading }: FileUploadProps) {
 
       {selectedFile && (
         <button
-          onClick={handleSubmit}
-          disabled={isUploading}
-          className="mt-6 w-full bg-gradient-to-r from-white via-gray-100 to-gray-300 text-black px-8 py-4 rounded-2xl font-semibold hover:from-gray-100 hover:to-gray-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 flex items-center justify-center space-x-3 shadow-lg hover:shadow-xl hover:scale-[1.02]"
-        >
+            onClick={handleSubmit}
+            disabled={isUploading}
+            className="mt-4 w-full bg-gradient-to-r from-white via-gray-100 to-gray-300 text-black px-8 py-4 rounded-2xl font-semibold hover:from-gray-100 hover:to-gray-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 flex items-center justify-center space-x-3 shadow-lg hover:shadow-xl hover:scale-[1.02]"
+          >
           {isUploading ? (
             <>
               <svg
@@ -180,7 +180,7 @@ export default function FileUpload({ onUpload, isUploading }: FileUploadProps) {
                   d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                 ></path>
               </svg>
-              <span className="text-lg">Processing Meeting...</span>
+              <span className="text-lg">Uploading File...</span>
             </>
           ) : (
             <>
@@ -192,7 +192,7 @@ export default function FileUpload({ onUpload, isUploading }: FileUploadProps) {
                   d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 11l3 3m0 0l3-3m-3 3V8"
                 />
               </svg>
-              <span className="text-lg">Upload & Process Meeting</span>
+              <span className="text-lg">Upload File</span>
             </>
           )}
         </button>
