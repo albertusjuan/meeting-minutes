@@ -90,8 +90,15 @@ echo "  Logs:"
 echo "    Backend:  logs/backend.log"
 echo "    Frontend: logs/frontend.log"
 echo ""
-echo "  To stop servers:"
-echo "    kill $BACKEND_PID $FRONTEND_PID"
+echo "  Press Ctrl+C to stop both servers"
 echo ""
 echo "========================================="
+
+# Trap SIGINT (Ctrl+C) to cleanup
+trap 'echo ""; echo "Stopping servers..."; kill $BACKEND_PID $FRONTEND_PID 2>/dev/null; exit' INT TERM
+
+# Keep script running and wait for background processes
+echo ""
+echo "Servers are running. Monitoring processes..."
+wait
 
