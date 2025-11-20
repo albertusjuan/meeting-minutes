@@ -59,21 +59,23 @@ export default function TranscriptView({ segments, speakers }: TranscriptViewPro
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-      <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center">
-        <svg
-          className="w-6 h-6 text-primary-600 mr-2"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
-          />
-        </svg>
+    <div className="glass-card rounded-3xl p-8">
+      <h2 className="text-xl font-semibold text-white mb-8 flex items-center">
+        <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-white via-gray-200 to-gray-400 flex items-center justify-center mr-3 shadow-lg">
+          <svg
+            className="w-5 h-5 text-black"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
+            />
+          </svg>
+        </div>
         Transcript
       </h2>
 
@@ -81,26 +83,26 @@ export default function TranscriptView({ segments, speakers }: TranscriptViewPro
         {segments.map((segment, index) => (
           <div
             key={index}
-            className="p-4 rounded-lg border border-gray-200 hover:border-gray-300 transition"
+            className="p-5 rounded-2xl glass hover:shadow-xl transition-all duration-200"
           >
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center space-x-2">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center space-x-3">
                 <span
-                  className={`px-3 py-1 rounded-full text-sm font-medium border ${getSpeakerColor(
+                  className={`px-4 py-1.5 rounded-xl text-sm font-semibold border ${getSpeakerColor(
                     segment.speaker_label
-                  )}`}
+                  )} shadow-sm`}
                 >
                   {getSpeakerDisplayName(segment.speaker_label)}
                 </span>
                 {getLanguageBadge(segment.language)}
               </div>
 
-              <span className="text-sm text-gray-500 font-mono">
+              <span className="text-sm text-gray-400 font-mono px-3 py-1 rounded-xl glass">
                 {formatTime(segment.start_time)} - {formatTime(segment.end_time)}
               </span>
             </div>
 
-            <p className="text-gray-800 leading-relaxed">{segment.text}</p>
+            <p className="text-gray-300 leading-relaxed text-base">{segment.text}</p>
           </div>
         ))}
       </div>

@@ -53,10 +53,10 @@ export default function FileUpload({ onUpload, isUploading }: FileUploadProps) {
   return (
     <div className="w-full">
       <div
-        className={`relative border-2 border-dashed rounded-lg p-8 text-center transition ${
+        className={`relative border-2 border-dashed rounded-3xl p-10 text-center transition-all duration-300 glass-card ${
           dragActive
-            ? 'border-primary-500 bg-primary-50'
-            : 'border-gray-300 bg-white hover:border-gray-400'
+            ? 'border-blue-400 scale-105 shadow-2xl'
+            : 'border-white/40'
         } ${isUploading ? 'opacity-50 pointer-events-none' : ''}`}
         onDragEnter={handleDrag}
         onDragOver={handleDrag}
@@ -72,67 +72,71 @@ export default function FileUpload({ onUpload, isUploading }: FileUploadProps) {
           disabled={isUploading}
         />
 
-        <div className="space-y-4">
+        <div className="space-y-5">
           <div className="flex justify-center">
-            <svg
-              className="w-16 h-16 text-gray-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-              />
-            </svg>
+            <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-white via-gray-200 to-gray-400 flex items-center justify-center shadow-xl">
+              <svg
+                className="w-10 h-10 text-black"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                />
+              </svg>
+            </div>
           </div>
 
           <div>
             <button
               type="button"
               onClick={() => inputRef.current?.click()}
-              className="text-primary-600 hover:text-primary-700 font-medium"
+              className="text-white hover:text-gray-200 font-semibold text-lg transition"
               disabled={isUploading}
             >
               Choose a file
             </button>
-            <span className="text-gray-600"> or drag and drop</span>
+            <span className="text-gray-400 text-lg"> or drag and drop</span>
           </div>
 
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-400 font-medium">
             WAV, MP3, M4A, or FLAC (up to 500MB)
           </p>
         </div>
 
         {selectedFile && (
-          <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+          <div className="mt-6 p-5 glass rounded-2xl">
             <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <svg
-                  className="w-8 h-8 text-primary-500"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"
-                  />
-                </svg>
+              <div className="flex items-center space-x-4">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-white via-gray-200 to-gray-400 flex items-center justify-center shadow-lg">
+                  <svg
+                    className="w-6 h-6 text-black"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"
+                    />
+                  </svg>
+                </div>
                 <div className="text-left">
-                  <p className="font-medium text-gray-900">{selectedFile.name}</p>
-                  <p className="text-sm text-gray-500">{formatFileSize(selectedFile.size)}</p>
+                  <p className="font-semibold text-white">{selectedFile.name}</p>
+                  <p className="text-sm text-gray-400">{formatFileSize(selectedFile.size)}</p>
                 </div>
               </div>
 
               {!isUploading && (
                 <button
                   onClick={() => setSelectedFile(null)}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="glass-button p-2 rounded-xl text-gray-300 hover:text-white"
                 >
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                     <path
@@ -152,12 +156,12 @@ export default function FileUpload({ onUpload, isUploading }: FileUploadProps) {
         <button
           onClick={handleSubmit}
           disabled={isUploading}
-          className="mt-6 w-full bg-primary-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition flex items-center justify-center space-x-2"
+          className="mt-6 w-full bg-gradient-to-r from-white via-gray-100 to-gray-300 text-black px-8 py-4 rounded-2xl font-semibold hover:from-gray-100 hover:to-gray-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 flex items-center justify-center space-x-3 shadow-lg hover:shadow-xl hover:scale-[1.02]"
         >
           {isUploading ? (
             <>
               <svg
-                className="animate-spin h-5 w-5 text-white"
+                className="animate-spin h-6 w-6 text-white"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -176,11 +180,11 @@ export default function FileUpload({ onUpload, isUploading }: FileUploadProps) {
                   d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                 ></path>
               </svg>
-              <span>Processing Meeting...</span>
+              <span className="text-lg">Processing Meeting...</span>
             </>
           ) : (
             <>
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -188,7 +192,7 @@ export default function FileUpload({ onUpload, isUploading }: FileUploadProps) {
                   d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 11l3 3m0 0l3-3m-3 3V8"
                 />
               </svg>
-              <span>Upload & Process Meeting</span>
+              <span className="text-lg">Upload & Process Meeting</span>
             </>
           )}
         </button>
