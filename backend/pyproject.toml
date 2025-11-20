@@ -1,0 +1,46 @@
+[tool.poetry]
+name = "meeting-minutes"
+version = "0.1.0"
+description = "Meeting Minutes - AI-powered transcription, diarization, and analysis"
+authors = ["Your Name <your.email@example.com>"]
+readme = "README.md"
+python = "^3.11"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.109.0"
+uvicorn = {extras = ["standard"], version = "^0.27.0"}
+pydantic = "^2.5.0"
+pydantic-settings = "^2.1.0"
+python-multipart = "^0.0.6"
+torch = "^2.1.0"
+torchaudio = "^2.1.0"
+transformers = "^4.36.0"
+pyannote-audio = "^3.1.0"
+faiss-cpu = "^1.7.4"
+sentence-transformers = "^2.2.2"
+openai = "^1.6.0"
+python-dotenv = "^1.0.0"
+aiofiles = "^23.2.1"
+soundfile = "^0.12.1"
+librosa = "^0.10.1"
+numpy = "<2.0.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.3"
+pytest-asyncio = "^0.21.1"
+black = "^23.12.1"
+ruff = "^0.1.9"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 100
+target-version = ['py311']
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
