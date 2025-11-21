@@ -1,18 +1,19 @@
 import { useState, useRef, ChangeEvent } from 'react';
 
 interface FileUploadProps {
-  onUpload: (file: File) => void;
-  isUploading: boolean;
+  onFileSelected: (file: File | null) => void;
 }
 
-export default function FileUpload({ onUpload, isUploading }: FileUploadProps) {
+export default function FileUpload({ onFileSelected }: FileUploadProps) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [dragActive, setDragActive] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setSelectedFile(e.target.files[0]);
+      const file = e.target.files[0];
+      setSelectedFile(file);
+      onFileSelected(file);
     }
   };
 
@@ -32,13 +33,17 @@ export default function FileUpload({ onUpload, isUploading }: FileUploadProps) {
     setDragActive(false);
 
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      setSelectedFile(e.dataTransfer.files[0]);
+      const file = e.dataTransfer.files[0];
+      setSelectedFile(file);
+      onFileSelected(file);
     }
   };
 
-  const handleSubmit = () => {
-    if (selectedFile && !isUploading) {
-      onUpload(selectedFile);
+  const handleRemoveFile = () => {
+    setSelectedFile(null);
+    onFileSelected(null);
+    if (inputRef.current) {
+      inputRef.current.value = '';
     }
   };
 
@@ -57,7 +62,7 @@ export default function FileUpload({ onUpload, isUploading }: FileUploadProps) {
           dragActive
             ? 'border-blue-400 scale-105 shadow-2xl'
             : 'border-white/40'
-        } ${isUploading ? 'opacity-50 pointer-events-none' : ''}`}
+        }`}
         onDragEnter={handleDrag}
         onDragOver={handleDrag}
         onDragLeave={handleDrag}
@@ -69,7 +74,6 @@ export default function FileUpload({ onUpload, isUploading }: FileUploadProps) {
           className="hidden"
           accept=".wav,.mp3,.m4a,.flac"
           onChange={handleFileChange}
-          disabled={isUploading}
         />
 
         <div className="space-y-5">
@@ -96,7 +100,6 @@ export default function FileUpload({ onUpload, isUploading }: FileUploadProps) {
               type="button"
               onClick={() => inputRef.current?.click()}
               className="text-white hover:text-gray-200 font-semibold text-lg transition"
-              disabled={isUploading}
             >
               Choose a file
             </button>
@@ -133,69 +136,29 @@ export default function FileUpload({ onUpload, isUploading }: FileUploadProps) {
                 </div>
               </div>
 
-              {!isUploading && (
-                <button
-                  onClick={() => setSelectedFile(null)}
-                  className="glass-button p-2 rounded-xl text-gray-300 hover:text-white"
-                >
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      fillRule="evenodd"
-                      d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </button>
-              )}
+              <button
+                onClick={handleRemoveFile}
+                className="glass-button p-2 rounded-xl text-gray-300 hover:text-white"
+              >
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    fillRule="evenodd"
+                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </button>
             </div>
           </div>
         )}
       </div>
 
       {selectedFile && (
-        <button
-            onClick={handleSubmit}
-            disabled={isUploading}
-            className="mt-4 w-full bg-gradient-to-r from-white via-gray-100 to-gray-300 text-black px-8 py-4 rounded-2xl font-semibold hover:from-gray-100 hover:to-gray-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 flex items-center justify-center space-x-3 shadow-lg hover:shadow-xl hover:scale-[1.02]"
-          >
-          {isUploading ? (
-            <>
-              <svg
-                className="animate-spin h-6 w-6 text-white"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                ></circle>
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                ></path>
-              </svg>
-              <span className="text-lg">Uploading File...</span>
-            </>
-          ) : (
-            <>
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 11l3 3m0 0l3-3m-3 3V8"
-                />
-              </svg>
-              <span className="text-lg">Upload File</span>
-            </>
-          )}
-        </button>
+        <div className="mt-4 text-center">
+          <p className="text-sm text-gray-400">
+            File selected! Scroll down to process it with RAG.
+          </p>
+        </div>
       )}
     </div>
   );

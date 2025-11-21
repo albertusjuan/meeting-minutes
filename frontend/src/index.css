@@ -2,6 +2,138 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Custom animations for background elements */
+@keyframes blob-slow {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  25% {
+    transform: translate(20px, -30px) scale(1.05);
+  }
+  50% {
+    transform: translate(-30px, 20px) scale(0.95);
+  }
+  75% {
+    transform: translate(30px, 30px) scale(1.02);
+  }
+}
+
+@keyframes blob-slower {
+  0%, 100% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+  }
+  33% {
+    transform: translate(-40px, 30px) scale(1.08) rotate(5deg);
+  }
+  66% {
+    transform: translate(40px, -20px) scale(0.92) rotate(-5deg);
+  }
+}
+
+@keyframes blob-slowest {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-20px, -40px) scale(1.1);
+  }
+}
+
+@keyframes pulse-slow {
+  0%, 100% {
+    opacity: 0.02;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.04;
+    transform: scale(1.05);
+  }
+}
+
+/* Tailwind custom animation utilities */
+@layer utilities {
+  .animate-blob-slow {
+    animation: blob-slow 30s ease-in-out infinite;
+  }
+  
+  .animate-blob-slower {
+    animation: blob-slower 40s ease-in-out infinite;
+  }
+  
+  .animate-blob-slowest {
+    animation: blob-slowest 35s ease-in-out infinite;
+  }
+  
+  .animate-pulse-slow {
+    animation: pulse-slow 8s ease-in-out infinite;
+  }
+
+  .bg-gradient-radial {
+    background: radial-gradient(circle, var(--tw-gradient-stops));
+  }
+}
+
+/* Custom slider styles - Clean version */
+input[type="range"].slider-clean {
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  z-index: 10;
+}
+
+input[type="range"].slider-clean::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ffffff;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  border: 2px solid #10b981;
+}
+
+input[type="range"].slider-clean::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.6);
+}
+
+input[type="range"].slider-clean::-webkit-slider-thumb:active {
+  transform: scale(1.15);
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.8);
+}
+
+input[type="range"].slider-clean::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ffffff;
+  cursor: pointer;
+  border: 2px solid #10b981;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+input[type="range"].slider-clean::-moz-range-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.6);
+}
+
+input[type="range"].slider-clean::-moz-range-thumb:active {
+  transform: scale(1.15);
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.8);
+}
+
+/* Remove default track styling */
+input[type="range"].slider-clean::-webkit-slider-runnable-track {
+  background: transparent;
+}
+
+input[type="range"].slider-clean::-moz-range-track {
+  background: transparent;
+}
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;

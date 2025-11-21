@@ -1,15 +1,23 @@
 import { ReactNode } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import BackgroundDecor from './layout/BackgroundDecor';
 
 interface LayoutProps {
   children: ReactNode;
 }
 
 export default function Layout({ children }: LayoutProps) {
+  const location = useLocation();
+
   return (
-    <div className="min-h-screen">
-      {/* Navbar */}
-      <nav className="glass sticky top-0 z-50">
+    <div className="min-h-screen relative bg-black">
+      {/* Background Decoration Layer */}
+      <BackgroundDecor />
+
+      {/* Main Content Layer */}
+      <div className="relative z-10">
+        {/* Navbar */}
+        <nav className="glass sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
             <Link to="/" className="flex items-center space-x-3 group">
@@ -34,28 +42,53 @@ export default function Layout({ children }: LayoutProps) {
             <div className="flex items-center space-x-2">
               <Link
                 to="/"
-                className="glass-button px-4 py-2 rounded-xl text-sm font-medium text-gray-200 hover:text-white"
+                className={`px-4 py-2 rounded-xl font-semibold transition-all duration-300 ${
+                  location.pathname === '/'
+                    ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white'
+                    : 'text-gray-300 hover:text-white hover:bg-white/10'
+                }`}
               >
                 Home
+              </Link>
+              <Link
+                to="/upload"
+                className={`px-4 py-2 rounded-xl font-semibold transition-all duration-300 ${
+                  location.pathname === '/upload'
+                    ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white'
+                    : 'text-gray-300 hover:text-white hover:bg-white/10'
+                }`}
+              >
+                Upload
+              </Link>
+              <Link
+                to="/dashboard"
+                className={`px-4 py-2 rounded-xl font-semibold transition-all duration-300 ${
+                  location.pathname === '/dashboard'
+                    ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white'
+                    : 'text-gray-300 hover:text-white hover:bg-white/10'
+                }`}
+              >
+                Dashboard
               </Link>
             </div>
           </div>
         </div>
       </nav>
 
-      {/* Main content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {children}
-      </main>
+        {/* Main content */}
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          {children}
+        </main>
 
-      {/* Footer */}
-      <footer className="mt-12 glass">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <p className="text-center text-sm text-gray-300 font-medium">
-            Meeting Minutes - AI-Powered Transcription & Analysis
-          </p>
-        </div>
-      </footer>
+        {/* Footer */}
+        <footer className="mt-12 glass">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <p className="text-center text-sm text-gray-300 font-medium">
+              Wyni Technology
+            </p>
+          </div>
+        </footer>
+      </div>
     </div>
   );
 }
